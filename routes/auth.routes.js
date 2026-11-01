@@ -13,6 +13,9 @@ router.get("/dashboard",async (req,res)=>{
     let equipments = await equipmentModel.find()
     res.render("dashboard",{equipments})
 })
+router.get("/",(req,res)=>{
+    res.redirect("/dashboard")
+})
 router.get("/signup",(req,res)=>{
     res.render("signup")
 })
@@ -29,7 +32,7 @@ router.post("/login",async (req,res)=>{
         console.log(check)
         if(check){
             let newUser = await userModel.findOne({email})
-            let token = jwt.sign({email:user.email,user:user.username},"shhhh")
+            let token = jwt.sign({email:user.email,user:user.username},process.env.JWT_SECRET)
             res.cookie("token",token)
             res.redirect("/dashboard")
         }else{

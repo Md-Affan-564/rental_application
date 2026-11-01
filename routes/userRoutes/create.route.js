@@ -14,7 +14,7 @@ router.post("/create", async (req,res)=>{
     bcrypt.genSalt(10,(err,salt)=>{
         bcrypt.hash(password,salt,async (err,hash)=>{
             let newUser = await userModel.create({username,email,password:hash})
-            let token = jwt.sign({email:newUser.email,user:newUser.username},"shhhh")
+            let token = jwt.sign({email:newUser.email,user:newUser.username},process.env.JWT_SECRET)
             res.cookie("token",token)
             res.redirect("/dashboard")
         })
