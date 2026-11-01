@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | RentEase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-white">
+
+    <nav class="border-b border-zinc-800 bg-zinc-950">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+            <a href="/dashboard" class="text-2xl font-bold tracking-tight">
+                Rent<span class="text-blue-500">Ease</span>
+            </a>
+
+            <div class="flex items-center gap-4 sm:gap-6 text-sm text-zinc-400">
+                <a href="/dashboard" class="transition hover:text-white">Dashboard</a>
+                <a href="/profile" class="text-blue-400">Profile</a>
+
+                <form action="/logout" method="POST">
+                    <button type="submit" class="rounded-lg bg-red-500/10 px-4 py-2 font-medium text-red-400 transition hover:bg-red-500/20">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="mx-auto max-w-7xl px-6 py-10">
+
+        <section class="mb-10 rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+            <p class="mb-2 text-sm font-medium text-blue-400">MY ACCOUNT</p>
+            <h1 class="mb-6 text-3xl font-bold">Profile</h1>
+
+            <div class="grid gap-6 sm:grid-cols-2">
+                <div>
+                    <p class="mb-1 text-sm text-zinc-500">Username</p>
+                    <p class="text-lg font-medium"><%= userData.username %></p>
+                </div>
+                <div>
+                    <p class="mb-1 text-sm text-zinc-500">Email</p>
+                    <p class="break-all text-lg font-medium"><%= userData.email %></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold">My Rentals</h2>
+                <p class="mt-1 text-sm text-zinc-400">Equipment you have rented.</p>
+            </div>
+
+            <% if (rentalData.length === 0) { %>
+                <div class="rounded-2xl border border-dashed border-zinc-800 p-10 text-center">
+                    <p class="text-zinc-400">You haven't rented any equipment yet.</p>
+                    <a href="/dashboard" class="mt-4 inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-medium transition hover:bg-blue-500">
+                        Explore Equipment
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="grid gap-5 md:grid-cols-2">
+                    <% rentalData.forEach((rental) => { %>
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+                            <h3 class="mb-4 text-xl font-semibold">
+                                <%= rental.equipment.name %>
+                            </h3>
+
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-zinc-500">Start Date</span>
+                                    <span><%= new Date(rental.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+                                </div>
+
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-zinc-500">End Date</span>
+                                    <span><%= new Date(rental.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) %></span>
+                                </div>
+
+                                <div class="flex justify-between gap-4">
+                                    <span class="text-zinc-500">Status</span>
+                                    <span class="rounded-full bg-blue-500/10 px-3 py-1 text-blue-400">
+                                        <%= rental.status %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </section>
+
+        <section>
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold">My Listed Equipment</h2>
+                <p class="mt-1 text-sm text-zinc-400">Equipment you have made available for rent.</p>
+            </div>
+
+            <% if (equipmentData.length === 0) { %>
+                <div class="rounded-2xl border border-dashed border-zinc-800 p-10 text-center">
+                    <p class="text-zinc-400">You haven't listed any equipment yet.</p>
+                    <a href="/equipment" class="mt-4 inline-block rounded-lg bg-blue-600 px-5 py-2.5 font-medium transition hover:bg-blue-500">
+                        List Equipment
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <% equipmentData.forEach((item) => { %>
+                        <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+                            <h3 class="mb-3 text-xl font-semibold"><%= item.name %></h3>
+                            <p class="mb-5 text-sm leading-6 text-zinc-400"><%= item.description %></p>
+                            <p class="text-lg font-bold text-blue-400">
+                                ₹<%= item.ppd %>
+                                <span class="text-sm font-normal text-zinc-500">/ day</span>
+                            </p>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </section>
+
+    </main>
+
+</body>
+</html>
